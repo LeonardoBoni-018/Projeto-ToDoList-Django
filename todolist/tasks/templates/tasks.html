@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Tasks: </h1>
+
+
+    <form method="POST" action="/" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn" type="submit" value="Adicionar tarefa">
+    </form>
+
+    <h2>Lista de Tarefas</h2>
+    {% for task in tasks %}
+        <div style="border:1px solid #ccc; margin-bottom:10px; padding:10px;">
+            <strong>{{ task.name }}</strong><br>
+            <em>Grupo:</em> {{ task.group }}<br>
+            <em>Descrição:</em> {{ task.description }}<br>
+            <em>Urgência:</em> {{ task.get_urgency_level_display }}<br>
+            <em>Prazo:</em> {{ task.due_date }}<br>
+            <em>Concluída:</em> {{ task.is_completed|yesno:"Sim,Não" }}<br>
+            <em>Tags:</em> {% for tag in task.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% empty %}Nenhuma{% endfor %}<br>
+            <em>Arquivos:</em> {% for file in task.files.all %}{{ file.file_path }}{% if not forloop.last %}, {% endif %}{% empty %}Nenhum{% endfor %}<br>
+            <a href="{% url 'update-task' task.id %}">Atualizar</a>
+            <a href="{% url 'delete-task' task.id %}">Apagar</a>
+        </div>
+    {% empty %}
+        <p>Nenhuma tarefa cadastrada.</p>
+    {% endfor %}
+
+</body>
+
+</html>
