@@ -1,0 +1,158 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Corpo da página */
+body {
+    background-color: #1e1e2f;
+    color: #f0f0f5;
+    padding: 0;
+}
+
+/* Container principal */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Menu de navegação */
+nav {
+    background-color: #2a2a3d;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #00bfff;
+}
+
+nav h1 {
+    color: #00bfff;
+    font-size: 1.8em;
+}
+
+nav a {
+    color: #f0f0f5;
+    text-decoration: none;
+    margin-left: 15px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #00bfff;
+}
+
+/* Títulos */
+h2 {
+    color: #00bfff;
+    margin-bottom: 20px;
+}
+
+/* Formulários */
+form {
+    background-color: #2a2a3d;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+}
+
+/* Campos de formulário */
+input[type="text"],
+input[type="datetime-local"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3b3b55;
+    color: #fff;
+}
+
+/* Botões */
+input.btn {
+    background-color: #00bfff;
+    color: #1e1e2f;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+input.btn:hover {
+    background-color: #009acd;
+}
+
+/* Cards de tarefas */
+.task-card {
+    background-color: #2a2a3d;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 5px solid #00bfff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Links de ação com ícones */
+.task-card .actions {
+    margin-top: 10px;
+}
+
+.task-card a {
+    text-decoration: none;
+    margin-right: 10px;
+    color: #00bfff;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+}
+
+.task-card a:hover {
+    color: #009acd;
+}
+
+.task-card a i {
+    margin-right: 5px;
+}
+
+/* Labels */
+em {
+    font-style: normal;
+    color: #aaaaaa;
+}
+
+/* Mensagens de vazio */
+p {
+    margin-top: 15px;
+    font-style: italic;
+    color: #bbbbbb;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .task-card {
+        font-size: 14px;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav a {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+}

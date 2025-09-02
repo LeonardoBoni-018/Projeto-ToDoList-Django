@@ -1,16 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tasks</title>
+    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-    <h1>Tasks: </h1>
+<nav>
+    <h1>ToDoList</h1>
+    <div>
+        <a href="{% url 'index' %}">Início</a>
+        <a href="{% url 'index' %}">Nova Tarefa</a>
+    </div>
+</nav>
 
-
+<div class="container">
+    <h2>Adicionar Tarefa</h2>
     <form method="POST" action="/" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
@@ -19,7 +27,7 @@
 
     <h2>Lista de Tarefas</h2>
     {% for task in tasks %}
-        <div style="border:1px solid #ccc; margin-bottom:10px; padding:10px;">
+        <div class="task-card">
             <strong>{{ task.name }}</strong><br>
             <em>Grupo:</em> {{ task.group }}<br>
             <em>Descrição:</em> {{ task.description }}<br>
@@ -28,13 +36,14 @@
             <em>Concluída:</em> {{ task.is_completed|yesno:"Sim,Não" }}<br>
             <em>Tags:</em> {% for tag in task.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% empty %}Nenhuma{% endfor %}<br>
             <em>Arquivos:</em> {% for file in task.files.all %}{{ file.file_path }}{% if not forloop.last %}, {% endif %}{% empty %}Nenhum{% endfor %}<br>
-            <a href="{% url 'update-task' task.id %}">Atualizar</a>
-            <a href="{% url 'delete-task' task.id %}">Apagar</a>
+            <div class="actions">
+                <a href="{% url 'update-task' task.id %}"><i class="fa-solid fa-pen"></i>Atualizar</a>
+                <a href="{% url 'delete-task' task.id %}"><i class="fa-solid fa-trash"></i>Apagar</a>
+            </div>
         </div>
     {% empty %}
         <p>Nenhuma tarefa cadastrada.</p>
     {% endfor %}
-
+</div>
 </body>
-
 </html>

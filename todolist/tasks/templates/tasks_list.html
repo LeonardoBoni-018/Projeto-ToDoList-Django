@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <nav>
+        <h1>ToDoList</h1>
+        <div style="display: flex; align-items: center; gap: 10px; margin-left:5px;">
+            <label for="order-select" style="color:#f0f0f5; font-weight:bold; font-size:1em; margin-left:5px;">Filtrar:</label>
+            <select id="order-select" name="order" onchange="window.location.href='?order='+this.value+'&search={{ search|urlencode }}'"
+                style="margin-left:4px;">
+                <option value="recent" {% if order == 'recent' %}selected{% endif %}>Mais recente</option>
+                <option value="oldest" {% if order == 'oldest' %}selected{% endif %}>Mais antiga</option>
+                <option value="alpha" {% if order == 'alpha' %}selected{% endif %}>Título (A-Z)</option>
+                <option value="urgency" {% if order == 'urgency' %}selected{% endif %}>Urgência</option>
+            </select>
+            <a href="{% url 'task-list' %}">Início</a>
+            
+            <a href="{% url 'task-create' %}">Nova Tarefa</a>
+        </div>
+    </nav>
+    <div class="container"> 
+        <div style="margin-bottom:18px;">
+            <h2 style="margin-bottom:0; text-align:center;">Lista de Tarefas</h2>
+            <!-- Barra de pesquisa centralizada -->
+            <form method="get" id="filter-form" style="display:flex; justify-content:center; align-items:center; margin-top:18px; margin-bottom:0; gap:14px;">
+                <input id="search-input" type="text" name="search" value="{{ search }}" placeholder="Buscar tarefa..."
+                    style="height:44px; padding: 10px 14px; border-radius: 7px; border: none; background: #23233a; color: #fff; font-size: 1em; outline: none; width: 100%; max-width: 320px; box-shadow: 0 1px 6px rgba(0,0,0,0.10); text-align:center;" autocomplete="off">
+                <input type="hidden" name="order" value="{{ order }}">
+                <button type="submit" style="height:44px; display:flex; align-items:center; padding: 0 18px; border-radius: 7px; border: none; background: #00bfff; color: #1e1e2f; font-size: 1em; font-weight: bold; cursor: pointer; transition: background 0.2s;">Buscar</button>
+            </form>
+        </div>
+
+        {% for task in tasks %}
+            <div class="task-card" style="border-left: 7px solid {{ task.urgency_color }}; box-shadow: 0 2px 8px rgba(0,0,0,0.10);">
+                <div class="task-header" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span style="font-size:1.2em;font-weight:bold;display:flex;align-items:center;gap:7px;">
+                        <span style="font-size:1.3em;">{{ task.urgency_icon }}</span> {{ task.name }}
+                    </span>
+                    {% if task.is_completed %}
+                        <span class="badge completed" style="background:#00bfff;color:#fff;padding:2px 8px;border-radius:5px;font-size:0.9em;">Concluída</span>
+                    {% endif %}
+                    <span class="badge urgency-{{ task.urgency_level }}" style="background:{{ task.urgency_color }};color:#fff;padding:2px 8px;border-radius:5px;font-size:0.9em;margin-left:10px;">{{ task.get_urgency_level_display }}</span>
+                </div>
+                <div class="task-meta" style="margin:8px 0;">
+                    <em>Grupo:</em> {{ task.group|default:'-' }}<br>
+                    <em>Prazo:</em> {{ task.due_date|date:"d/m/Y H:i"|default:'-' }}<br>
+                    <em>Criada em:</em> {{ task.created_at|date:"d/m/Y H:i" }}<br>
+                    <em>Tags:</em> {% for tag in task.tags.all %}<span class="tag" style="background:#00bfff;color:#fff;padding:2px 6px;border-radius:3px;margin-right:3px;">{{ tag.name }}</span>{% empty %}Nenhuma{% endfor %}
+                </div>
+                <div class="task-desc" style="margin-bottom:8px;">
+                    <em>Descrição:</em> {{ task.description|default:"(Sem descrição)" }}
+                </div>
+                <div class="task-files" style="margin-bottom:8px;">
+                    <em>Arquivos:</em> {% for file in task.files.all %}<span class="file" style="background:#333;color:#fff;padding:2px 6px;border-radius:3px;margin-right:3px;">{{ file.file_path }}</span>{% empty %}Nenhum{% endfor %}
+                </div>
+                <div class="actions">
+                    <a class="edit" href="{% url 'task-update' task.id %}"><i class="fa fa-edit"></i>Editar</a>
+                    <a class="delete" href="{% url 'task-delete' task.id %}"><i class="fa fa-trash"></i>Excluir</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>Nenhuma tarefa cadastrada.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

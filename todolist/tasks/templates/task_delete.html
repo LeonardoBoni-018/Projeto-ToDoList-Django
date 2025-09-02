@@ -1,33 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Apagar Tarefa</title>
+    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}">
 </head>
-
 <body>
     <nav>
         <h1>ToDoList</h1>
         <div>
-            <a href="{% url 'index' %}">Início</a>
-            <a href="{% url 'index' %}">Nova Tarefa</a>
+            <a href="{% url 'task-list' %}">Início</a>
+            <a href="{% url 'task-create' %}">Nova Tarefa</a>
         </div>
     </nav>
     <div class="container">
-        <h1>Apagar Tarefa</h1>
-
+        <h2>Apagar Tarefa</h2>
         <p>Tem certeza que deseja apagar a tarefa - {{ task }}?</p>
-        <a href="{% url 'index' %}">Cancelar</a>
-
+        <a href="{% url 'task-list' %}">Cancelar</a>
         <form method="POST" action="">
             {% csrf_token %}
-            <input type="submit" value="Apagar">
+            <input class="btn" type="submit" value="Apagar">
         </form>
     </div>
-
-
 </body>
-
 </html>
