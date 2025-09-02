@@ -19,15 +19,14 @@
                 <option value="alpha" {% if order == 'alpha' %}selected{% endif %}>Título (A-Z)</option>
                 <option value="urgency" {% if order == 'urgency' %}selected{% endif %}>Urgência</option>
             </select>
-            <a href="{% url 'task-list' %}">Início</a>
-            
-            <a href="{% url 'task-create' %}">Nova Tarefa</a>
+                <a href="{% url 'task-list' %}">Início</a>
+                <a href="{% url 'task-create' %}">Nova Tarefa</a>
+                <a href="{% url 'logout' %}" style="margin-left:15px;">Sair</a>
         </div>
     </nav>
     <div class="container"> 
         <div style="margin-bottom:18px;">
             <h2 style="margin-bottom:0; text-align:center;">Lista de Tarefas</h2>
-            <!-- Barra de pesquisa centralizada -->
             <form method="get" id="filter-form" style="display:flex; justify-content:center; align-items:center; margin-top:18px; margin-bottom:0; gap:14px;">
                 <input id="search-input" type="text" name="search" value="{{ search }}" placeholder="Buscar tarefa..."
                     style="height:44px; padding: 10px 14px; border-radius: 7px; border: none; background: #23233a; color: #fff; font-size: 1em; outline: none; width: 100%; max-width: 320px; box-shadow: 0 1px 6px rgba(0,0,0,0.10); text-align:center;" autocomplete="off">
@@ -60,8 +59,8 @@
                     <em>Arquivos:</em> {% for file in task.files.all %}<span class="file" style="background:#333;color:#fff;padding:2px 6px;border-radius:3px;margin-right:3px;">{{ file.file_path }}</span>{% empty %}Nenhum{% endfor %}
                 </div>
                 <div class="actions">
-                    <a class="edit" href="{% url 'task-update' task.id %}"><i class="fa fa-edit"></i>Editar</a>
-                    <a class="delete" href="{% url 'task-delete' task.id %}"><i class="fa fa-trash"></i>Excluir</a>
+                        <a href="{% url 'task-update' task.id %}" class="btn">Editar</a>
+                        <a href="{% url 'task-delete' task.id %}" class="btn">Apagar</a>
                 </div>
             </div>
         {% empty %}

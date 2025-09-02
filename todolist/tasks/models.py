@@ -1,6 +1,16 @@
 from django.db import models
 
 
+# Modelo de usuário customizado
+class CustomUser(models.Model):
+    email = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
+
+
 class TaskGroup(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -35,6 +45,7 @@ class Task(models.Model):
     due_date = models.DateTimeField(null=True, blank=True)
     urgency_level = models.CharField(max_length=10, choices=URGENCY_CHOICES, default='baixa')
     tags = models.ManyToManyField(Tag, blank=True, related_name='tasks')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='tasks', null=True)
 
     def __str__(self):
         return self.name

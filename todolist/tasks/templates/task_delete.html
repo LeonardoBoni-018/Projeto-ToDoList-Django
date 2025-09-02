@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apagar Tarefa</title>
-    <link rel="stylesheet" href="{% static 'tasks/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
     <nav>
@@ -13,16 +13,19 @@
         <div>
             <a href="{% url 'task-list' %}">Início</a>
             <a href="{% url 'task-create' %}">Nova Tarefa</a>
+            <a href="{% url 'logout' %}" style="margin-left:15px;">Sair</a>
         </div>
     </nav>
-    <div class="container">
-        <h2>Apagar Tarefa</h2>
-        <p>Tem certeza que deseja apagar a tarefa - {{ task }}?</p>
-        <a href="{% url 'task-list' %}">Cancelar</a>
-        <form method="POST" action="">
+    <div class="container" style="max-width:400px;margin-top:60px;background:#23233a;padding:40px 30px;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.25);display:flex;flex-direction:column;align-items:center;">
+        <h2 style="text-align:center;color:#ff3b3b;margin-bottom:18px;letter-spacing:1px;font-size:2em;">Apagar Tarefa</h2>
+        <div style="width:100%;background:#2a2a3d;padding:18px 16px;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,0.10);margin-bottom:18px;">
+            <p style="text-align:center;color:#f0f0f5;font-size:1.1em;margin-bottom:0;">Tem certeza que deseja apagar a tarefa <strong style="color:#ff3b3b;">{{ task }}</strong>?</p>
+        </div>
+        <form method="POST" action="" style="width:100%;display:flex;flex-direction:column;gap:18px;align-items:center;">
             {% csrf_token %}
-            <input class="btn" type="submit" value="Apagar">
+            <button type="submit" class="btn" style="background:#ff3b3b;color:#fff;font-weight:bold;font-size:1.1em;padding:12px 0;width:100%;border-radius:8px;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.10);transition:background 0.2s;">Apagar</button>
         </form>
+        <a href="{% url 'task-list' %}" style="margin-top:22px;color:#00bfff;font-weight:bold;text-decoration:none;font-size:1em;">Cancelar</a>
     </div>
 </body>
 </html>

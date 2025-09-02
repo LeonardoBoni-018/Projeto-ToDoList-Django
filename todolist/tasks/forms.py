@@ -10,6 +10,11 @@ class TaskForm(forms.ModelForm):
     )
     file = forms.FileField(required=False)
 
+    due_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+
     class Meta:
         model = Task
         fields = ['name', 'description', 'group', 'due_date', 'urgency_level', 'tags', 'is_completed']

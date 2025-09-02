@@ -15,14 +15,38 @@
             <a href="{% url 'task-create' %}">Nova Tarefa</a>
         </div>
     </nav>
-    <div class="container">
-        <h2>Criar Nova Tarefa</h2>
-        <form method="POST" enctype="multipart/form-data">
+    <div class="container" style="max-width:500px;margin-top:60px;background:#23233a;padding:40px 30px;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.25);">
+        <h2 style="text-align:center;color:#00bfff;margin-bottom:28px;letter-spacing:1px;font-size:2em;">Criar Nova Tarefa</h2>
+        <form method="POST" enctype="multipart/form-data" style="display:flex;flex-direction:column;gap:18px;">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input class="btn" type="submit" value="Salvar">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <label for="id_name" style="color:#f0f0f5;font-weight:500;">Título</label>
+                <input type="text" name="name" id="id_name" value="{{ form.name.value }}" required placeholder="Título da tarefa" style="padding:12px 16px;border-radius:8px;border:none;background:#2a2a3d;color:#fff;font-size:1em;">
+
+                <label for="id_description" style="color:#f0f0f5;font-weight:500;">Descrição</label>
+                <textarea name="description" id="id_description" placeholder="Descrição da tarefa" style="padding:12px 16px;border-radius:8px;border:none;background:#2a2a3d;color:#fff;font-size:1em;">{{ form.description.value }}</textarea>
+
+                <label for="id_group" style="color:#f0f0f5;font-weight:500;">Grupo</label>
+                {{ form.group }}
+
+                <label for="id_due_date" style="color:#f0f0f5;font-weight:500;">Prazo</label>
+                <input type="date" name="due_date" id="id_due_date" value="{{ form.due_date.value|date:'Y-m-d' }}" style="padding:12px 16px;border-radius:8px;border:none;background:#2a2a3d;color:#fff;font-size:1em;">
+
+                <label for="id_urgency_level" style="color:#f0f0f5;font-weight:500;">Urgência</label>
+                {{ form.urgency_level }}
+
+                <label for="id_tags" style="color:#f0f0f5;font-weight:500;">Tags</label>
+                {{ form.tags }}
+
+                <label for="id_is_completed" style="color:#f0f0f5;font-weight:500;">Concluída?</label>
+                {{ form.is_completed }}
+
+                <label for="id_file" style="color:#f0f0f5;font-weight:500;">Arquivo</label>
+                {{ form.file }}
+            </div>
+            <button type="submit" class="btn" style="background:#00bfff;color:#1e1e2f;font-weight:bold;font-size:1.1em;padding:12px 0;border-radius:8px;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.10);transition:background 0.2s;">Salvar</button>
         </form>
-        <a href="{% url 'task-list' %}">Voltar</a>
+        <p style="text-align:center;margin-top:22px;color:#bbb;font-size:1em;"><a href="{% url 'task-list' %}" style="color:#00bfff;font-weight:bold;text-decoration:none;">Voltar</a></p>
     </div>
 </body>
 </html>
