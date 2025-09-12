@@ -6,27 +6,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atualizar Tarefa</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS custom -->
     <link rel="stylesheet" href="{% static 'tasks/styles.css' %}">
+    <style>
+        body {
+            background: #1e1e2f;
+            color: #f0f0f5;
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            background: #23233a;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav h1 {
+            margin: 0;
+            color: #00bfff;
+        }
+        nav a {
+            color: #f0f0f5;
+            margin-left: 12px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #00bfff;
+        }
+        .container {
+            margin-top: 30px;
+            background: #2b2b3d;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            max-width: 700px;
+        }
+        h1 {
+            color: #00bfff;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .btn-primary {
+            background: #00bfff;
+            border: none;
+            color: #1e1e2f;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            background: #009acd;
+        }
+        .form-control {
+            background: #23233a;
+            color: #fff;
+            border: none;
+        }
+        .form-control:focus {
+            background: #23233a;
+            color: #fff;
+            box-shadow: 0 0 0 2px #00bfff;
+        }
+    </style>
 </head>
 
-<div>
+<body>
     <nav>
         <h1>ToDoList</h1>
         <div>
-            <a href="{% url 'index' %}">Início</a>
-            <a href="{% url 'index' %}">Nova Tarefa</a>
+            <a href="{% url 'task-list' %}">Início</a>
+            <a href="{% url 'task-create' %}">Nova Tarefa</a>
         </div>
     </nav>
+
     <div class="container">
+        <h1>Atualizar Tarefa</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary w-100 mt-3">Atualizar</button>
+        </form>
     </div>
-
-    <h1>Atualizar Tarefa</h1>
-    <form method="POST" action="/" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn" type="submit" value="Atualizar">
-    </form>
-</div>
 </body>
-
 </html>

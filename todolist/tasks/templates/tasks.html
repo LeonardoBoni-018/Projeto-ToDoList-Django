@@ -6,44 +6,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tasks</title>
     <link rel="stylesheet" href="{% static 'tasks/styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<nav>
-    <h1>ToDoList</h1>
-    <div>
-        <a href="{% url 'index' %}">Início</a>
-        <a href="{% url 'index' %}">Nova Tarefa</a>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">ToDoList</a>
+        <div>
+            <a class="btn btn-outline-light me-2" href="{% url 'index' %}">Início</a>
+            <a class="btn btn-primary" href="{% url 'index' %}">Nova Tarefa</a>
+        </div>
     </div>
 </nav>
 
 <div class="container">
-    <h2>Adicionar Tarefa</h2>
-    <form method="POST" action="/" enctype="multipart/form-data">
+    <!-- Formulário -->
+    <h2 class="mb-3">Adicionar Tarefa</h2>
+    <form method="POST" action="/" enctype="multipart/form-data" class="card p-3 mb-4 shadow-sm">
         {% csrf_token %}
         {{ form.as_p }}
-        <input class="btn" type="submit" value="Adicionar tarefa">
+        <button type="submit" class="btn btn-success mt-2">Adicionar tarefa</button>
     </form>
 
-    <h2>Lista de Tarefas</h2>
-    {% for task in tasks %}
-        <div class="task-card">
-            <strong>{{ task.name }}</strong><br>
-            <em>Grupo:</em> {{ task.group }}<br>
-            <em>Descrição:</em> {{ task.description }}<br>
-            <em>Urgência:</em> {{ task.get_urgency_level_display }}<br>
-            <em>Prazo:</em> {{ task.due_date }}<br>
-            <em>Concluída:</em> {{ task.is_completed|yesno:"Sim,Não" }}<br>
-            <em>Tags:</em> {% for tag in task.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% empty %}Nenhuma{% endfor %}<br>
-            <em>Arquivos:</em> {% for file in task.files.all %}{{ file.file_path }}{% if not forloop.last %}, {% endif %}{% empty %}Nenhum{% endfor %}<br>
-            <div class="actions">
-                <a href="{% url 'update-task' task.id %}"><i class="fa-solid fa-pen"></i>Atualizar</a>
-                <a href="{% url 'delete-task' task.id %}"><i class="fa-solid fa-trash"></i>Apagar</a>
+    <!-- Lista de Tarefas -->
+    <h2 class="mb-3">Lista de Tarefas</h2>
+    <div class="row">
+        {% for task in tasks %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ task.name }}</h5>
+                        <p class="card-text">
+                            <em>Grupo:</em> {{ task.group }}<br>
+                            <em>Descrição:</em> {{ task.description }}<br>
+                            <em>Urgência:</em> {{ task.get_urgency_level_display }}<br>
+                            <em>Prazo:</em> {{ task.due_date }}<br>
+                            <em>Concluída:</em> {{ task.is_completed|yesno:"Sim,Não" }}<br>
+                            <em>Tags:</em> 
+                            {% for tag in task.tags.all %}
+                                <span class="badge bg-info text-dark">{{ tag.name }}</span>
+                            {% empty %}
+                                <span class="text-muted">Nenhuma</span>
+                            {% endfor %}<br>
+                            <em>Arquivos:</em>
+                            {% for file in task.files.all %}
+                                <a href="{{ file.file_path.url }}" target="_blank" class="d-block">
+                                    <i class="fa fa-file"></i> {{ file.file_path.name }}
+                                </a>
+                            {% empty %}
+                                <span class="text-muted">Nenhum</span>
+                            {% endfor %}
+                        </p>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'update-task' task.id %}" class="btn btn-sm btn-warning">
+                                <i class="fa-solid fa-pen"></i> Atualizar
+                            </a>
+                            <a href="{% url 'delete-task' task.id %}" class="btn btn-sm btn-danger">
+                                <i class="fa-solid fa-trash"></i> Apagar
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% empty %}
-        <p>Nenhuma tarefa cadastrada.</p>
-    {% endfor %}
+        {% empty %}
+            <p class="text-muted">Nenhuma tarefa cadastrada.</p>
+        {% endfor %}
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

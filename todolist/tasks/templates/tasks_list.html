@@ -5,67 +5,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Tarefas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+    <style>
+      body {
+        background-color: #1e1e2f;
+        color: #f0f0f5;
+      }
+      .navbar {
+        background-color: #23233a !important;
+      }
+      .btn-primary {
+        background-color: #00bfff;
+        border: none;
+      }
+      .btn-primary:hover {
+        background-color: #009acd;
+      }
+      .btn-info {
+        background-color: #00bfff;
+        border: none;
+        color: #1e1e2f;
+      }
+      .form-control {
+        background-color: #23233a;
+        color: #fff;
+        border: none;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+        text-align: center;
+      }
+      .form-control:focus {
+        background-color: #2e2e44;
+        color: #fff;
+        border: none;
+        box-shadow: 0 0 0 0.25rem rgba(0,191,255,0.4);
+      }
+      .card {
+        background-color: #2b2b40;
+        color: #f0f0f5;
+        border: none;
+      }
+      .badge.bg-info {
+        background-color: #00bfff !important;
+        color: #fff !important;
+      }
+      .badge.bg-success {
+        background-color: #00bfff !important;
+      }
+      .btn-warning {
+        background-color: #ffaa00;
+        border: none;
+      }
+      .btn-danger {
+        background-color: #ff4d4d;
+        border: none;
+      }
+    </style>
 </head>
 <body>
-    <nav>
-        <h1>ToDoList</h1>
-        <div style="display: flex; align-items: center; gap: 10px; margin-left:5px;">
-            <label for="order-select" style="color:#f0f0f5; font-weight:bold; font-size:1em; margin-left:5px;">Filtrar:</label>
-            <select id="order-select" name="order" onchange="window.location.href='?order='+this.value+'&search={{ search|urlencode }}'"
-                style="margin-left:4px;">
-                <option value="recent" {% if order == 'recent' %}selected{% endif %}>Mais recente</option>
-                <option value="oldest" {% if order == 'oldest' %}selected{% endif %}>Mais antiga</option>
-                <option value="alpha" {% if order == 'alpha' %}selected{% endif %}>Título (A-Z)</option>
-                <option value="urgency" {% if order == 'urgency' %}selected{% endif %}>Urgência</option>
-            </select>
-                <a href="{% url 'task-list' %}">Início</a>
-                <a href="{% url 'task-create' %}">Nova Tarefa</a>
-                <a href="{% url 'logout' %}" style="margin-left:15px;">Sair</a>
-        </div>
-    </nav>
-    <div class="container"> 
-        <div style="margin-bottom:18px;">
-            <h2 style="margin-bottom:0; text-align:center;">Lista de Tarefas</h2>
-            <form method="get" id="filter-form" style="display:flex; justify-content:center; align-items:center; margin-top:18px; margin-bottom:0; gap:14px;">
-                <input id="search-input" type="text" name="search" value="{{ search }}" placeholder="Buscar tarefa..."
-                    style="height:44px; padding: 10px 14px; border-radius: 7px; border: none; background: #23233a; color: #fff; font-size: 1em; outline: none; width: 100%; max-width: 320px; box-shadow: 0 1px 6px rgba(0,0,0,0.10); text-align:center;" autocomplete="off">
-                <input type="hidden" name="order" value="{{ order }}">
-                <button type="submit" style="height:44px; display:flex; align-items:center; padding: 0 18px; border-radius: 7px; border: none; background: #00bfff; color: #1e1e2f; font-size: 1em; font-weight: bold; cursor: pointer; transition: background 0.2s;">Buscar</button>
-            </form>
-        </div>
 
-        {% for task in tasks %}
-            <div class="task-card" style="border-left: 7px solid {{ task.urgency_color }}; box-shadow: 0 2px 8px rgba(0,0,0,0.10);">
-                <div class="task-header" style="display:flex;align-items:center;justify-content:space-between;">
-                    <span style="font-size:1.2em;font-weight:bold;display:flex;align-items:center;gap:7px;">
-                        <span style="font-size:1.3em;">{{ task.urgency_icon }}</span> {{ task.name }}
-                    </span>
-                    {% if task.is_completed %}
-                        <span class="badge completed" style="background:#00bfff;color:#fff;padding:2px 8px;border-radius:5px;font-size:0.9em;">Concluída</span>
-                    {% endif %}
-                    <span class="badge urgency-{{ task.urgency_level }}" style="background:{{ task.urgency_color }};color:#fff;padding:2px 8px;border-radius:5px;font-size:0.9em;margin-left:10px;">{{ task.get_urgency_level_display }}</span>
-                </div>
-                <div class="task-meta" style="margin:8px 0;">
-                    <em>Grupo:</em> {{ task.group|default:'-' }}<br>
-                    <em>Prazo:</em> {{ task.due_date|date:"d/m/Y H:i"|default:'-' }}<br>
-                    <em>Criada em:</em> {{ task.created_at|date:"d/m/Y H:i" }}<br>
-                    <em>Tags:</em> {% for tag in task.tags.all %}<span class="tag" style="background:#00bfff;color:#fff;padding:2px 6px;border-radius:3px;margin-right:3px;">{{ tag.name }}</span>{% empty %}Nenhuma{% endfor %}
-                </div>
-                <div class="task-desc" style="margin-bottom:8px;">
-                    <em>Descrição:</em> {{ task.description|default:"(Sem descrição)" }}
-                </div>
-                <div class="task-files" style="margin-bottom:8px;">
-                    <em>Arquivos:</em> {% for file in task.files.all %}<span class="file" style="background:#333;color:#fff;padding:2px 6px;border-radius:3px;margin-right:3px;">{{ file.file_path }}</span>{% empty %}Nenhum{% endfor %}
-                </div>
-                <div class="actions">
-                        <a href="{% url 'task-update' task.id %}" class="btn">Editar</a>
-                        <a href="{% url 'task-delete' task.id %}" class="btn">Apagar</a>
-                </div>
-            </div>
-        {% empty %}
-            <p>Nenhuma tarefa cadastrada.</p>
-        {% endfor %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-light" href="{% url 'task-list' %}">ToDoList</a>
+
+    <div class="d-flex align-items-center gap-3">
+      <label for="order-select" class="text-light fw-bold mb-0">Filtrar:</label>
+      <select id="order-select" class="form-select form-select-sm bg-dark text-light"
+              onchange="window.location.href='?order='+this.value+'&search={{ search|urlencode }}'">
+          <option value="recent" {% if order == 'recent' %}selected{% endif %}>Mais recente</option>
+          <option value="oldest" {% if order == 'oldest' %}selected{% endif %}>Mais antiga</option>
+          <option value="alpha" {% if order == 'alpha' %}selected{% endif %}>Título (A-Z)</option>
+          <option value="urgency" {% if order == 'urgency' %}selected{% endif %}>Urgência</option>
+      </select>
+      <a class="btn btn-outline-light btn-sm" href="{% url 'task-list' %}">Início</a>
+      <a class="btn btn-primary btn-sm" href="{% url 'task-create' %}">Nova Tarefa</a>
+      <a class="btn btn-danger btn-sm ms-2" href="{% url 'logout' %}">Sair</a>
     </div>
+  </div>
+</nav>
+
+<div class="container my-4">
+  <!-- Título + Busca -->
+  <h2 class="text-center mb-3 text-light">Lista de Tarefas</h2>
+
+  <form method="get" id="filter-form" class="d-flex justify-content-center mb-4 gap-2">
+    <input id="search-input" type="text" name="search" value="{{ search }}" placeholder="Buscar tarefa..."
+           class="form-control w-50" autocomplete="off">
+    <input type="hidden" name="order" value="{{ order }}">
+    <button type="submit" class="btn btn-info fw-bold">Buscar</button>
+  </form>
+
+  <!-- Lista de Tarefas -->
+  <div class="row">
+    {% for task in tasks %}
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-start border-4" style="border-color: {{ task.urgency_color }} !important;">
+          <div class="card-body">
+            
+            <!-- Cabeçalho -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="card-title d-flex align-items-center gap-2 mb-0">
+                <span>{{ task.urgency_icon }}</span> {{ task.name }}
+              </h5>
+              <div class="d-flex gap-2">
+                {% if task.is_completed %}
+                  <span class="badge bg-success">Concluída</span>
+                {% endif %}
+                <span class="badge" style="background:{{ task.urgency_color }};">
+                  {{ task.get_urgency_level_display }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Informações -->
+            <p class="mb-1"><em>Grupo:</em> {{ task.group|default:"-" }}</p>
+            <p class="mb-1"><em>Prazo:</em> {{ task.due_date|date:"d/m/Y H:i"|default:"-" }}</p>
+            <p class="mb-1"><em>Criada em:</em> {{ task.created_at|date:"d/m/Y H:i" }}</p>
+            <p class="mb-1">
+              <em>Tags:</em>
+              {% for tag in task.tags.all %}
+                <span class="badge bg-info">{{ tag.name }}</span>
+              {% empty %}
+                Nenhuma
+              {% endfor %}
+            </p>
+
+            <!-- Descrição -->
+            <p><em>Descrição:</em> {{ task.description|default:"(Sem descrição)" }}</p>
+
+            <!-- Arquivos -->
+            <p>
+              <em>Arquivos:</em>
+              {% for file in task.files.all %}
+                <span class="badge bg-secondary">{{ file.file_path }}</span>
+              {% empty %}
+                Nenhum
+              {% endfor %}
+            </p>
+
+            <!-- Ações -->
+            <div class="d-flex gap-2 mt-3">
+              <a href="{% url 'task-update' task.id %}" class="btn btn-warning btn-sm">Editar</a>
+              <a href="{% url 'task-delete' task.id %}" class="btn btn-danger btn-sm">Apagar</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted">Nenhuma tarefa cadastrada.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
