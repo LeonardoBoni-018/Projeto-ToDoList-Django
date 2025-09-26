@@ -97,14 +97,12 @@
     <button type="submit" class="btn btn-info fw-bold">Buscar</button>
   </form>
 
-  <!-- Lista de Tarefas -->
   <div class="row">
     {% for task in tasks %}
       <div class="col-md-6 mb-4">
         <div class="card shadow-sm border-start border-4" style="border-color: {{ task.urgency_color }} !important;">
           <div class="card-body">
             
-            <!-- Cabeçalho -->
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h5 class="card-title d-flex align-items-center gap-2 mb-0">
                 <span>{{ task.urgency_icon }}</span> {{ task.name }}
@@ -119,18 +117,17 @@
               </div>
             </div>
 
-            <!-- Informações -->
-            <p class="mb-1"><em>Grupo:</em> {{ task.group|default:"-" }}</p>
+            {% comment %} <p class="mb-1"><em>Grupo:</em> {{ task.group|default:"-" }}</p> {% endcomment %}
             <p class="mb-1"><em>Prazo:</em> {{ task.due_date|date:"d/m/Y H:i"|default:"-" }}</p>
             <p class="mb-1"><em>Criada em:</em> {{ task.created_at|date:"d/m/Y H:i" }}</p>
-            <p class="mb-1">
+            {% comment %} <p class="mb-1">
               <em>Tags:</em>
               {% for tag in task.tags.all %}
                 <span class="badge bg-info">{{ tag.name }}</span>
               {% empty %}
                 Nenhuma
               {% endfor %}
-            </p>
+            </p> {% endcomment %}
 
             <!-- Descrição -->
             <p><em>Descrição:</em> {{ task.description|default:"(Sem descrição)" }}</p>
