@@ -43,7 +43,7 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     due_date = models.DateTimeField(null=True, blank=True)
     urgency_level = models.CharField(max_length=10, choices=URGENCY_CHOICES, default='baixa')
-    tags = models.ManyToManyField(Tag, blank=True, related_name='tasks')
+    tag = models.ForeignKey(Tag, null=True, blank=True, on_delete=models.SET_NULL, related_name='tasks')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='tasks', null=True)
 
     def __str__(self):

@@ -118,14 +118,7 @@
             <p class="mb-1"><em>Grupo:</em> {{ task.group|default:"-" }}</p>
             <p class="mb-1"><em>Prazo:</em> {{ task.due_date|date:"d/m/Y H:i"|default:"-" }}</p>
             <p class="mb-1"><em>Criada em:</em> {{ task.created_at|date:"d/m/Y H:i" }}</p>
-              <p class="mb-1">
-              <em>Tags:</em>
-              {% for tag in task.tags.all %}
-                <span class="badge bg-info">{{ tag.name }}</span>
-              {% empty %}
-                Nenhuma
-              {% endfor %}
-            </p> 
+            <p class="mb-1"><em>Tag:</em> {% if task.tag %}<span class="badge bg-info">{{ task.tag.name }}</span>{% else %}-{% endif %}</p>
 
             <p><em>Descrição:</em> {{ task.description|default:"(Sem descrição)" }}</p>
 

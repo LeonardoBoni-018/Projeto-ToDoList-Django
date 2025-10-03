@@ -112,17 +112,18 @@
             <label for="id_description">Descrição</label>
             {{ form.description|add_class:"form-control" }}
 
-              <label for="id_group">Grupo</label>
-            {{ form.group|add_class:"form-control" }}  
 
-            <label for="id_due_date">Prazo</label>
-            {{ form.due_date|add_class:"form-control" }}
+                        <label for="id_group">Grupo</label>
+                        {{ form.group|add_class:"form-control" }}
 
-            <label for="id_urgency_level">Urgência</label>
-            {{ form.urgency_level|add_class:"form-select" }}
+                        <label for="id_due_date">Prazo</label>
+                        {{ form.due_date|add_class:"form-control" }}
 
-              <label for="id_tags">Tags</label>
-            {{ form.tags|add_class:"form-select" }} 
+                        <label for="id_urgency_level">Urgência</label>
+                        {{ form.urgency_level|add_class:"form-select" }}
+
+                        <label for="id_tag">Tag</label>
+                        {{ form.tag|add_class:"form-select" }}
 
             <div class="form-check">
                 {{ form.is_completed|add_class:"form-check-input" }}
