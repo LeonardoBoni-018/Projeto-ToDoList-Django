@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Task, TaskFile, CustomUser
+from .models import Task, TaskFile, CustomUser, Tag
 from .forms import TaskForm
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 def get_logged_user(request):
@@ -52,9 +53,26 @@ def task_list(request):
         return redirect('login')
     order = request.GET.get('order', 'recent')
     search = request.GET.get('search', '').strip()
+    status_filter = request.GET.get('status', '')
+    urgency_filter = request.GET.get('urgency', '')
+    tag_filter = request.GET.get('tag', '')
+    
     tasks = Task.objects.filter(user=user)
+    
     if search:
         tasks = tasks.filter(name__icontains=search)
+    
+    if status_filter == 'completed':
+        tasks = tasks.filter(is_completed=True)
+    elif status_filter == 'pending':
+        tasks = tasks.filter(is_completed=False)
+    
+    if urgency_filter:
+        tasks = tasks.filter(urgency_level=urgency_filter)
+    
+    if tag_filter:
+        tasks = tasks.filter(tag__id=tag_filter)
+    
     if order == 'recent':
         tasks = tasks.order_by('-created_at')
     elif order == 'oldest':
@@ -70,12 +88,27 @@ def task_list(request):
         'alta': {'color': '#ff8c00', 'icon': '🟠'},
         'urgente':{'color': '#ff3b3b', 'icon': '🔴'},
     }
-    for t in tasks:
+    
+    paginator = Paginator(tasks, 6)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    
+    for t in page_obj:
         u = urgency_map.get(t.urgency_level, {'color': '#222', 'icon': '⚪'})
         t.urgency_color = u['color']
         t.urgency_icon = u['icon']
 
-    return render(request, 'tasks_list.html', {'tasks': tasks, 'order': order, 'search': search})
+    tags = Tag.objects.all()
+    return render(request, 'tasks_list.html', {
+        'page_obj': page_obj,
+        'tasks': page_obj.object_list,
+        'order': order, 
+        'search': search,
+        'status_filter': status_filter,
+        'urgency_filter': urgency_filter,
+        'tag_filter': tag_filter,
+        'tags': tags
+    })
 
 
 def task_create(request):
